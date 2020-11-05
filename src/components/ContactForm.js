@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
 
 const ContactForm = () => {
   const [data, setData] = useState();
+  const [post,setPost]=useState();
   const { register, errors, handleSubmit } = useForm({
     mode: "onBlur",
   });
   const onSubmit = (data) => {
     setData(data);
   };
+
+  useEffect(()=>{
+   axios.post("https://reqres.in/api/users",data)
+    .then(res=>{
+      console.log('here is post',res.data)
+      setPost(res.data)
+    })
+    .catch(err=>console.log('error in axios call',err)) 
+
+  },[data])
 
   return (
     <div className="App">
@@ -83,7 +95,7 @@ const ContactForm = () => {
         </div>
         {data && (
           <pre style={{ textAlign: "left", color: "white" }}>
-            {JSON.stringify(data, null, 2)}
+            {JSON.stringify(post, null, 2)}
           </pre>
         )}
         
